@@ -1,5 +1,6 @@
 from typing import Dict, Any, Optional, List
 
+
 class DataStorage:
     def __init__(self):
         self._records: Dict[int, Dict[str, Any]] = {}
@@ -8,8 +9,8 @@ class DataStorage:
     def create(self, post_data: Dict[str, Any]) -> int:
         item_id = post_data.get("id") or self._counter
         if item_id in self._records:
-             item_id = max(self._records.keys() or [0]) + 1
-        
+            item_id = max(self._records.keys() or [0]) + 1
+
         self._records[item_id] = post_data
         if isinstance(item_id, int) and item_id >= self._counter:
             self._counter = item_id + 1

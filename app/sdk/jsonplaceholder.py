@@ -9,7 +9,6 @@ class JSONPlaceholderSDK:
     def __init__(self):
         self.BASE_URL = BASE_URL
 
-
     def get_post(self, post_id: int) -> Dict[str, Any]:
         response = requests.get(f"{self.BASE_URL}/posts/{post_id}")
         response.raise_for_status()

@@ -15,13 +15,13 @@ class TestSDKTask(unittest.TestCase):
         post_data = {"id": 1, "title": "test"}
         item_id = self.storage.create(post_data)
         self.assertEqual(item_id, 1)
-        
+
         saved_item = self.storage.get(1)
         self.assertEqual(saved_item["title"], "test")
-        
+
         self.storage.update(1, {"title": "updated"})
         self.assertEqual(self.storage.get(1)["title"], "updated")
-        
+
         self.storage.delete(1)
         self.assertIsNone(self.storage.get(1))
 
@@ -39,4 +39,3 @@ class TestSDKTask(unittest.TestCase):
         self.assertEqual(fetched_post["id"], 5)
         self.assertEqual(len(self.storage.get_all()), 1)
         self.assertEqual(self.storage.get(5)["title"], "Mock Post")
-

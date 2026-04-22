@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, status
-from app.schemas.post import PostCreate, PostRead
+from app.schemas.post import PostCreate
 from app.sdk.jsonplaceholder import JSONPlaceholderSDK
 from app.service.post_service import PostService
 from app.storage.memory_storage import DataStorage
@@ -21,9 +21,11 @@ async def fetch_post(post_id: int):
             detail=str(error),
         )
 
+
 @app.get("/fetch-recent")
 async def fetch_recent(limit: int = 5):
     return service.fetch_and_save_recent_posts(limit)
+
 
 @app.get("/posts/{post_id}")
 async def get_local_post(post_id: int):
@@ -35,9 +37,11 @@ async def get_local_post(post_id: int):
         )
     return post
 
+
 @app.get("/posts")
 async def get_saved_postsapp():
     return service.get_local_posts()
+
 
 @app.post("/create")
 async def create_post(post: PostCreate):
