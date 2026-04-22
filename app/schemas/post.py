@@ -8,7 +8,7 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    pass
+    """New post creation schema"""
 
 
 class PostRead(PostBase):
