@@ -1,41 +1,41 @@
-import unittest
+from typing import Any
 from unittest.mock import MagicMock
-from app.sdk.jsonplaceholder import JSONPlaceholderSDK
+
 from app.service.post_service import PostService
 from app.storage.memory_storage import DataStorage
 
 
-class TestSDKTask(unittest.TestCase):
-    def setUp(self):
-        self.sdk = JSONPlaceholderSDK()
-        self.storage = DataStorage()
-        self.service = PostService(self.sdk, self.storage)
+class TestPostSDK:
+    def test_storage_crud(self, storage: DataStorage) -> None:
+        post_data: dict[str, Any] = {"id": 1, "title": "test"}
+        item_id = storage.create(post_data)
+        assert item_id == 1
 
-    def test_storage_crud(self):
-        post_data = {"id": 1, "title": "test"}
-        item_id = self.storage.create(post_data)
-        self.assertEqual(item_id, 1)
+        saved_item = storage.get(1)
+        assert saved_item is not None
+        assert saved_item["title"] == "test"
 
-        saved_item = self.storage.get(1)
-        self.assertEqual(saved_item["title"], "test")
+        storage.update(1, {"title": "updated"})
+        updated_item = storage.get(1)
+        assert updated_item is not None
+        assert updated_item["title"] == "updated"
 
-        self.storage.update(1, {"title": "updated"})
-        self.assertEqual(self.storage.get(1)["title"], "updated")
+        storage.delete(1)
+        assert storage.get(1) is None
 
-        self.storage.delete(1)
-        self.assertIsNone(self.storage.get(1))
-
-    def test_service_fetch_and_save(self):
-        mock_post = {
+    def test_service_fetch_and_save(self, service: PostService, storage: DataStorage) -> None:
+        mock_post: dict[str, Any] = {
             "id": 5,
             "title": "Mock Post",
             "body": "content",
             "userId": 1,
         }
-        self.service.sdk.get_post = MagicMock(return_value=mock_post)
+        service.sdk.get_post = MagicMock(return_value=mock_post)  # type: ignore
 
-        fetched_post = self.service.fetch_and_save_post(5)
+        fetched_post = service.fetch_and_save_post(5)
 
-        self.assertEqual(fetched_post["id"], 5)
-        self.assertEqual(len(self.storage.get_all()), 1)
-        self.assertEqual(self.storage.get(5)["title"], "Mock Post")
+        assert fetched_post["id"] == 5
+        assert len(storage.get_all()) == 1
+        post = storage.get(5)
+        assert post is not None
+        assert post["title"] == "Mock Post"

@@ -1,12 +1,13 @@
 import os
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 import requests
 
 BASE_URL = os.getenv('BASE_URL', 'https://jsonplaceholder.typicode.com')
 
 
 class JSONPlaceholderSDK:
-    def __init__(self):
+    def __init__(self) -> None:
         self.BASE_URL = BASE_URL
 
     def get_post(self, post_id: int) -> Dict[str, Any]:

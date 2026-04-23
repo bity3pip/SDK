@@ -1,4 +1,7 @@
+from typing import Any
+
 from fastapi import FastAPI, HTTPException, status
+
 from app.schemas.post import PostCreate
 from app.sdk.jsonplaceholder import JSONPlaceholderSDK
 from app.service.post_service import PostService
@@ -12,7 +15,7 @@ service = PostService(sdk, storage)
 
 
 @app.get("/fetch/{post_id}")
-async def fetch_post(post_id: int):
+async def fetch_post(post_id: int) -> dict[str, Any]:
     try:
         return service.fetch_and_save_post(post_id)
     except Exception as error:
@@ -23,12 +26,12 @@ async def fetch_post(post_id: int):
 
 
 @app.get("/fetch-recent")
-async def fetch_recent(limit: int = 5):
+async def fetch_recent(limit: int = 5) -> list[dict[str, Any]]:
     return service.fetch_and_save_recent_posts(limit)
 
 
 @app.get("/posts/{post_id}")
-async def get_local_post(post_id: int):
+async def get_local_post(post_id: int) -> dict[str, Any]:
     post = storage.get(post_id)
     if not post:
         raise HTTPException(
@@ -39,12 +42,12 @@ async def get_local_post(post_id: int):
 
 
 @app.get("/posts")
-async def get_saved_postsapp():
+async def get_saved_postsapp() -> list[dict[str, Any]]:
     return service.get_local_posts()
 
 
 @app.post("/create")
-async def create_post(post: PostCreate):
+async def create_post(post: PostCreate) -> dict[str, Any]:
     return service.create_remote_and_local_post(
         post.title,
         post.body,

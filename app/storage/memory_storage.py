@@ -1,8 +1,8 @@
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
 
 class DataStorage:
-    def __init__(self):
+    def __init__(self) -> None:
         self._records: Dict[int, Dict[str, Any]] = {}
         self._counter = 1
 
